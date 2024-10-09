@@ -7,46 +7,45 @@ description: >
 
 ## Introduction
 
-The [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/) is a unified tool for creating and managing AWS services via a command line interface.
-All CLI commands applicable to services implemented within [LocalStack]({{< ref "references/coverage/" >}}) can be executed when operating against LocalStack.
-
-You can use the AWS CLI with LocalStack using either of the following approaches:
-
-* [AWS CLI]({{<ref "#aws-cli" >}})
-* [LocalStack AWS CLI]({{<ref "#localstack-aws-cli-awslocal">}})
+* [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/)
+  * == unified tool /
+    * allows 
+      * creating & managing AWS services -- via a -- CLI
+    * uses
+      * 👁️ALL CLI commands / -- applicable to -- services implemented | [LocalStack]({{< ref "references/coverage/" >}}) -> can be executed | operating against LocalStack 👁️
+  * ways to use | LocalStack
+    * own [AWS CLI]({{<ref "#aws-cli" >}})
+    * [LocalStack AWS CLI]({{<ref "#localstack-aws-cli-awslocal">}})
 
 ## AWS CLI
 
-You can install `aws` by using the following command if it's not already installed.
+* Follow 
+  * [AWS CLI official installation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+  * [AWS CLI configuration](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+    * _Example:_
 
-{{< command >}}
-$ pip install awscli
-{{< / command >}}
+    ```
+    $ export AWS_ACCESS_KEY_ID="test"
+    $ export AWS_SECRET_ACCESS_KEY="test"
+    $ export AWS_DEFAULT_REGION="us-east-1"
+    ```
 
-You can configure the AWS CLI to redirect AWS API requests to LocalStack using two approaches:
-
-* [Configuring an endpoint URL](#configuring-an-endpoint-url)
-* [Configuring a custom profile](#configuring-a-custom-profile)
+* ways to configure the AWS CLI / AWS API requests -- are redirected to -- LocalStack
+  * [Configuring an endpoint URL](#configuring-an-endpoint-url)
+  * [Configuring a custom profile](#configuring-a-custom-profile)
 
 ### Configuring an endpoint URL
 
-You can use AWS CLI with an endpoint URL by configuring test environment variables and include the `--endpoint-url=<localstack-url>` flag in your `aws` CLI commands.
-For example:
-
-{{< command >}}
-$ export AWS_ACCESS_KEY_ID="test"
-$ export AWS_SECRET_ACCESS_KEY="test"
-$ export AWS_DEFAULT_REGION="us-east-1"
-
-$ aws --endpoint-url=http://localhost:4566 kinesis list-streams
-{{< / command >}}
-
-{{< callout >}}
-To enable the creation of pre-signed URLs for S3 buckets, please set both `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to the value "test." Our pre-signed URL signature verification algorithm validates the pre-signed URL and its expiration.
-{{< /callout >}}
+* _Example1:_ `aws --endpoint-url=http://localhost:4566 kinesis list-streams`
+  * "localhost:4566" default port
+* _Example2:_ if you want to enable the creation of pre-signed URLs / S3 buckets -> set  `AWS_ACCESS_KEY_ID="test"` & `AWS_SECRET_ACCESS_KEY="test"`
+  * pre-signed URL signature verification algorithm -- validates --
+    * pre-signed URL
+    * its expiration
 
 ### Configuring a custom profile
 
+* TODO:
 You can configure a custom profile to use with LocalStack.
 Add the following profile to your AWS configuration file (by default, this file is at `~/.aws/config`):
 
