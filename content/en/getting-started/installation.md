@@ -11,7 +11,8 @@ cascade:
 
 ## LocalStack CLI
 
-The quickest way get started with LocalStack is by using the LocalStack CLI.
+* quickest way / get started
+* TODO:
 It allows you to start LocalStack from your command line.
 Please make sure that you have a working [Docker installation](https://docs.docker.com/get-docker/) on your machine before moving on.
 
@@ -195,28 +196,25 @@ Afterwards, check out our [Quickstart guide]({{< ref "quickstart" >}}) to start 
 
 ## Alternatives
 
-Besides using the CLI, there are other ways of starting and managing your LocalStack instance:
-
-- [LocalStack Desktop]({{< ref "#localstack-desktop" >}})\
-  Get a desktop experience and work with your local LocalStack instance via the UI.
-
-- [LocalStack Docker Extension]({{< ref "#localstack-docker-extension" >}})\
-  Use the LocalStack extension for Docker Desktop to work with your LocalStack instance.
-
-- [Docker-Compose]({{< ref "#docker-compose" >}})\
-  Use Docker Compose to configure and start your LocalStack Docker container.
-
-- [Docker]({{< ref "#docker" >}})\
-  Use the Docker CLI to manually start the LocalStack Docker container.
-
-- [Helm]({{< ref "#helm" >}})\
-  Use Helm to create a LocalStack deployment in a Kubernetes cluster.
-
-LocalStack runs inside a Docker container, and the above options are different ways to start and manage the LocalStack Docker container.
-For a comprehensive overview of the LocalStack images, check out our [Docker images documentation]({{< ref "docker-images" >}}).
+* goal
+  * different ways to start & manage the LocalStack Docker container
+    * 👁️== running the LocalStack Docker container -- by -- yourself👁️
+* alternatives
+  * [LocalStack Desktop]({{< ref "#localstack-desktop" >}})
+    * == desktop solution == UI
+  * [LocalStack Docker Extension]({{< ref "#localstack-docker-extension" >}})
+    * == LocalStack extension | Docker Desktop
+  * [Docker-Compose]({{< ref "#docker-compose" >}})
+  * [Docker]({{< ref "#docker" >}})
+    * == use the Docker CLI
+  * [Helm]({{< ref "#helm" >}})
+    * allows
+      * creating a LocalStack deployment | Kubernetes cluster
+* [available Docker LocalStack images documentation]({{< ref "docker-images" >}})
 
 ### LocalStack Desktop
 
+* TODO:
 Learn more about our desktop client at [LocalStack Desktop]({{< ref "localstack-desktop" >}}) and download it [here](https://app.localstack.cloud/download).
 
 ### LocalStack Docker Extension
@@ -226,27 +224,34 @@ See [LocalStack Docker Extension]({{< ref "localstack-docker-extension" >}}) for
 
 ### Docker-Compose
 
-To use LocalStack without the [LocalStack CLI]({{< ref "#localstack-cli" >}}), you have the option of running the LocalStack Docker container by yourself.
-If you want to manually manage your Docker container, it's usually a good idea to use [Docker Compose](https://docs.docker.com/compose/reference/) in order to simplify your container configuration.
+* [Docker Compose](https://docs.docker.com/compose/reference/)
+* alternative to use [LocalStack CLI]({{< ref "#localstack-cli" >}})
+* allows
+  * simplifying your container configuration
 
 #### Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/) (version 1.9.0+)
+* [Docker](https://docs.docker.com/get-docker/)
+* [Docker Compose v1.9.0+](https://docs.docker.com/compose/install/) 
 
 #### Starting LocalStack with Docker-Compose
 
-You can start LocalStack with [Docker Compose](https://docs.docker.com/compose/) by configuring a `docker-compose.yml` file.
-Docker Compose v1.9.0 and above is supported.
+* create `docker-compose.yml`
+  * if you are using LocalStack with an [auth token]({{< ref "auth-token" >}}) -> specify the image tag  `localstack/localstack-pro`
+  * mount the Docker socket `/var/run/docker.sock` -- as a -- volume
+    * Reason: 👁️required for some services / -- use Docker to provide the -- emulation (_Example:_ AWS Lambda)
+    * Check [Lambda providers]({{< ref "user-guide/aws/lambda" >}})
+  * if you want to facilitate interoperability -> configuration variables can be prefixed with `LOCALSTACK_` | docker
+    * _Example:_ set `LOCALSTACK_PERSISTENCE=1` == `PERSISTENCE=1`
 
 {{< tabpane lang="yml" >}}
 {{< tab header="Community" lang="yml" >}}
 version: "3.8"
-
 services:
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
-    image: localstack/localstack
+    image: localstack/localstack  # latest, by default
+    # image: localstack/localstack:<version>        # if you want to specify the version
     ports:
       - "127.0.0.1:4566:4566"            # LocalStack Gateway
       - "127.0.0.1:4510-4559:4510-4559"  # external services port range
@@ -259,7 +264,6 @@ services:
 {{< /tab >}}
 {{< tab header="Pro" lang="yml" >}}
 version: "3.8"
-
 services:
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
@@ -280,43 +284,21 @@ services:
 {{< /tab >}}
 {{< /tabpane >}}
 
-Start the container by running the following command:
 
-{{< command >}}
-$ docker-compose up
-{{< / command >}}
-
-{{< callout "note" >}}
-- This command pulls the current nightly build from the `master` branch (if you don't have the image locally) and **not** the latest supported version.
-  If you want to use a specific version, set the appropriate LocalStack image tag at `services.localstack.image` in the `docker-compose.yml` file (for example `localstack/localstack:<version>`).
-
-- If you are using LocalStack with an [auth token]({{< ref "auth-token" >}}), you need to specify the image tag as `localstack/localstack-pro` in the `docker-compose.yml` file.
-  Going forward, `localstack/localstack-pro` image will contain our Pro-supported services and APIs.
-
-- This command reuses the image if it's already on your machine, i.e. it will **not** pull the latest image automatically from Docker Hub.
-
-- Mounting the Docker socket `/var/run/docker.sock` as a volume is required for some services that use Docker to provide the emulation, such as AWS Lambda.
-  Check out the [Lambda providers]({{< ref "user-guide/aws/lambda" >}}) documentation for more information.
-
-- To facilitate interoperability, configuration variables can be prefixed with `LOCALSTACK_` in docker.
-  For instance, setting `LOCALSTACK_PERSISTENCE=1` is equivalent to `PERSISTENCE=1`.
-
-- If using the Docker default bridge network using `network_mode: bridge`, container name resolution will not work inside your containers.
-  Please consider removing it, if this functionality is needed.
-
-- To configure an auth token, refer to the [auth token]({{< ref "auth-token" >}}) documentation.
-{{< /callout >}}
-
-Please note that there are a few pitfalls when configuring your stack manually via docker-compose (e.g., required container name, Docker network, volume mounts, and environment variables).
-We recommend using the LocalStack CLI to validate your configuration, which will print warning messages in case it detects any potential misconfigurations:
-
-{{< command >}}
-$ localstack config validate
-...
-{{< / command >}}
+* `$ docker-compose up`
+* if using the Docker default bridge network (`network_mode: bridge`), container name resolution does NOT work |  inside your containers -> remove it
+* if you get errors -> check around
+  * container name,
+  * Docker network,
+  * volume mounts,
+  * environment variables
+* `$ localstack config validate`
+  * 👁️way to validate your configuration 👁️
+  * if there are any potential misconfigurations -> will print warning messages
 
 ### Docker
 
+* TODO:
 You can also directly start the LocalStack container using the Docker CLI instead of [Docker-Compose]({{< ref "#docker-compose" >}}).
 This method requires more manual steps and configuration, but it gives you more control over the container settings.
 
