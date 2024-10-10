@@ -8,18 +8,26 @@ description: >
   Overview of LocalStack and AWS specific internal endpoints for local development and testing
 ---
 
-LocalStack provides several internal endpoints for various local AWS services and LocalStack-specific features.
-These endpoints are not part of the official AWS API and are available in the `/_localstack` and `/_aws` paths.
-You can use [curl](https://curl.se/) or your favourite HTTP REST client to access endpoints.
+* uses
+  * various local AWS services
+  * LocalStack-specific features
+* NOT part of the official AWS API
+* available | paths
+  * `/_localstack`
+  * `/_aws` paths
+* ways to access
+  * [curl](https://curl.se/)
+  * HTTP REST client
+  * ...
 
 ## LocalStack endpoints
 
-The API path for the LocalStack internal resources is `/_localstack`.
-The following endpoints are available:
+* `/_localstack`
+  * API path -- for -- LocalStack internal resources
 
 | Endpoint | Description |
 | ------------------------------------ | --------------------------------------------------------------------------- |
-| `/_localstack/health`                | To check the available and running AWS services in LocalStack. You can use the endpoint to restart the LocalStack services.  |
+| `/_localstack/health`                | check the available and running AWS services </br>  restart the LocalStack services  |
 | `/_localstack/plugins`               | Shows the [Plux plugins](https://github.com/localstack/localstack/blob/master/docs/localstack-concepts/README.md#plugins) information in LocalStack. |
 | `/_localstack/init`                  | Shows the initialization status after setting up [Init hooks](https://docs.localstack.cloud/references/init-hooks/). |
 | `/_localstack/cloudformation/deploy` | Enables you to deploy CloudFormation templates locally through a web interface. |
