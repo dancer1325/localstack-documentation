@@ -132,7 +132,7 @@ This section covers configuration options that are specific to certain AWS servi
 | - | - | - |
 | `DYNAMODB_ERROR_PROBABILITY` | Decimal value between `0.0`(default) and `1.0` | Randomly inject `ProvisionedThroughputExceededException` errors into DynamoDB API responses. |
 | `DYNAMODB_HEAP_SIZE` | `256m` (default), `1G` | Sets the JAVA EE maximum memory size for DynamoDB; full table scans require more memory |
-| `DYNAMODB_SHARE_DB` | `0`\|`1` | When activated, DynamodDB will use a single database instead of separate databases for each credential and region. |
+| `DYNAMODB_SHARE_DB` | `0`\|`1` | if it's activated -> DynamodDB -- will use -- 1! database instead of separate databases / credential & region |
 | `DYNAMODB_IN_MEMORY` | `0` (default) \|`1` | When activated, DynamodDB will start in in-memory mode, which can have a faster throughput. If you use this options, both persistence and cloud pods will not work for DynamoDB |
 | `DYNAMODB_OPTIMIZE_DB_BEFORE_STARTUP` | `0`\|`1` | Optimize the database tables in the store before starting |
 | `DYNAMODB_DELAY_TRANSIENT_STATUSES` | `0`\|`1` | When activated, DynamoDB will introduce artificial delays in resource creation to simulate the actual cloud service more closely. Currently works only for CREATING and DELETING online index statuses. |
@@ -469,7 +469,7 @@ To learn more about these configuration options, see [DNS Server]({{< ref "dns-s
 | `DATA_DIR`| 2.0.0 | blank (disabled/default), `/tmp/localstack/data` |  Local directory for saving persistent data. Use `PERSISTENCE` instead. |
 | `DISABLE_TERM_HANDLER` | 2.0.0 | `""` (default) \| `1` | Whether to disable signal passing to LocalStack when running in docker. Enabling this will prevent an orderly shutdown when running inside LS in docker. Setting this to anything else than an empty string will disable it.
 | `HOST_TMP_FOLDER` | 2.0.0 | `/some/path` |  Temporary folder on the host that gets mounted as `$TMPDIR/localstack` into the LocalStack container. Required only for Lambda volume mounts when using `LAMBDA_REMOTE_DOCKER=false.` |
-| `INIT_SCRIPTS_PATH` | 2.0.0 | `/some/path` | Before 1.0, this was used to configure the path to the initializing files with extensions `.sh` that were found in `/docker-entrypoint-initaws.d`. This has been replaced by the [init-hook system](https://docs.localstack.cloud/references/init-hooks/). |
+| `INIT_SCRIPTS_PATH` | 2.0.0 | `/some/path` | configure the path to the initializing files / extensions `.sh` / were found in `/docker-entrypoint-initaws.d` </br> -- replaced by -- [init-hook system](https://docs.localstack.cloud/references/init-hooks/) |
 | `LEGACY_DIRECTORIES` | 2.0.0 | `0` (default) | Use legacy method of managing internal filesystem layout. See [Filesystem Layout]({{< ref "filesystem" >}}). |
 | `LEGACY_INIT_DIR` | 2.0.0 | `1` \| `0`(default) | Used with `INIT_SCRIPTS_PATH`. This has been replaced by the [init-hook system](https://docs.localstack.cloud/references/init-hooks/). |
 | `MULTI_ACCOUNTS` | 2.0.0 | `0` (default) | Enable multi-accounts (preview) |
