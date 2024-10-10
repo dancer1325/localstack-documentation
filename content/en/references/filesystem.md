@@ -7,13 +7,13 @@ aliases:
   - /localstack/filesystem/
 ---
 
-This page describes the filesystem directory layout used internally by LocalStack.
-
-{{< callout >}}
-This filesystem layout was introduced in LocalStack v1 and can be disabled by setting `LEGACY_DIRECTORIES` to `1`.
-{{< /callout >}}
-
-LocalStack uses following directory layout when running within a container.
+* goal
+  * filesystem directory layout / used internally -- by -- LocalStack
+    * == created | LocalStack container
+* filesystem layout
+  * LocalStack v1+
+  * if you want to disable it -> set `LEGACY_DIRECTORIES=1`
+  * if you want to check it -> go into the container
 
 ```plaintext
 /
@@ -25,7 +25,7 @@ LocalStack uses following directory layout when running within a container.
 │       └── localstack
 └── var
     └── lib
-        └── localstack  <- the LocalStack volume directory root
+        └── localstack    // LocalStack volume directory root
             ├── cache
             ├── lib
             ├── logs
@@ -34,79 +34,90 @@ LocalStack uses following directory layout when running within a container.
 
 ```
 
+
 ## Directory contents
 
 ### LocalStack volume directory
 
-- `/var/lib/localstack`: the [LocalStack volume](#localstack-volume) directory root
-- `/var/lib/localstack/lib`: variable packages (like extensions or lazy-loaded third-party dependencies)
-- `/var/lib/localstack/logs`: logs for recent LocalStack runs
-- `/var/lib/localstack/state`: contains the state of services if persistence is enabled (such as OpenSearch cluster data)
-- `/var/lib/localstack/tmp`: temporary data that is not expected to survive LocalStack runs (may be cleared when LocalStack starts or stops)
-- `/var/lib/localstack/cache`: temporary data that is expected to survive LocalStack runs (is not cleared when LocalStack starts or stops)
+* `/var/lib/localstack`
+  * [LocalStack volume](#localstack-volume) directory root
+* `/var/lib/localstack/lib`
+  * variable packages 
+    * == extensions or lazy-loaded third-party dependencies
+* `/var/lib/localstack/logs`
+  * logs for recent LocalStack runs
+* `/var/lib/localstack/state`
+  * == if persistence is enabled -> state of services (_Example:_ OpenSearch cluster data)
+* `/var/lib/localstack/tmp`
+  * == temporary data / NOT survive in LocalStack runs
+    * == if LocalStack starts or stops -> it's cleared 
+* `/var/lib/localstack/cache`
+  * == temporary data / survive LocalStack runs  
+    * == if LocalStack starts or stops -> it's NOT cleared
 
 ### Configuration
 
-- `/etc/localstack`: configuration directory
-- `/etc/localstack/init`: root directory for [initialization hooks]({{< ref `init-hooks` >}})
-<!-- For future use, not currently in use
-- `/etc/localstack/conf.d`: configuration overrides
--->
+* `/etc/localstack`
+  * configuration directory
+* `/etc/localstack/init`
+  * root directory for [initialization hooks]({{< ref `init-hooks` >}})
+  * in future -> NOT needed
+    * Reason: 🧠`/etc/localstack/conf.d` overrides🧠
 
 ### Static libraries
 
-- `/usr/lib/localstack`: static third-party packages installed into the container images
-
-{{< callout >}}
-Previously, directories were individually configurable, e.g., via `DATA_DIR` or `HOST_TMP_DIR`.
-These have been deprecated since LocalStack v1, since we now follow a directory convention.
-
-`DATA_DIR` implicitly points to `/var/lib/localstack/state` if persistence is enabled.
-Use `PERSISTENCE=1` to enable persistence.
-If `DATA_DIR` is set, its value is ignored, a warning is logged and `PERSISTENCE` is set to `1`.
-
-`HOST_TMP_FOLDER` is determined by inspecting the volume mounts and using the source of the bind mount to `/var/lib/localstack`.
-{{< /callout >}}
+* `/usr/lib/localstack`
+  * == static third-party packages / installed | container images
+* `DATA_DIR`
+  * deprecated LocalStack v1
+    * Reason: 🧠directory convention is followed 🧠
+    * if it's set -> value ignored
+  * if `PERSISTENCE=1` (== persistence is enabled) -> `DATA_DIR` -- implicitly points to -- `/var/lib/localstack/state` 
+* `HOST_TMP_DIR`
+  * deprecated LocalStack v1
+    * Reason: 🧠directory convention is followed 🧠
+* `HOST_TMP_FOLDER`
+  * == source of the bind mount to `/var/lib/localstack`
 
 ## LocalStack volume
 
-For LocalStack to function correctly, the LocalStack volume must be mounted from the host into the container at `/var/lib/localstack`.
+* LocalStack volume -- must be mounted -- host:container's `/var/lib/localstack`
+  * Reason: 🧠LocalStack works correctly 🧠 
 
 ### Using docker-compose
-
-When using Docker Compose, this can be achieved using following:
 
 ```yaml
 volumes:
   - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
 ```
 
-`${LOCALSTACK_VOLUME_DIR}` could be an arbitrary location on the host, e.g., `./volume`.
-In this case, the effective layout would be something like:
+* 👁️`${LOCALSTACK_VOLUME_DIR}` could be an ARBITRARY location | host 👁️
+  * _Example:_ `./volume`
 
-```plaintext
-$ tree -L 4 ./volume
-.
-└── localstack
-    ├── cache
-    │   ├── machine.json
-    │   ├── server.test.pem
-    │   ├── server.test.pem.crt
-    │   └── server.test.pem.key
-    ├── lib
-    │   └── opensearch
-    │       └── 1.1.0
-    ├── logs
-    │   ├── localstack_infra.err
-    │   └── localstack_infra.log
-    ├── state
-    │   └── startup_info.json
-    └── tmp
-        └── zipfile.4986fb95
-```
+    ```plaintext
+    $ tree -L 4 ./volume
+    .
+    └── localstack
+        ├── cache
+        │   ├── machine.json
+        │   ├── server.test.pem
+        │   ├── server.test.pem.crt
+        │   └── server.test.pem.key
+        ├── lib
+        │   └── opensearch
+        │       └── 1.1.0
+        ├── logs
+        │   ├── localstack_infra.err
+        │   └── localstack_infra.log
+        ├── state
+        │   └── startup_info.json
+        └── tmp
+            └── zipfile.4986fb95
+    ```
 
 ### Using the CLI
 
+* TODO:
 When using the CLI to start LocalStack, the volume directory can be configured via the `LOCALSTACK_VOLUME_DIR`.
 It should point to a directory on the host which is then automatically mounted into `/var/lib/localstack`.
 The defaults are:
