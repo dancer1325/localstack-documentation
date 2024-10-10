@@ -33,7 +33,7 @@ Options that affect the core LocalStack system.
 | - | - | - |
 | `DEBUG` | `0` (default) \|`1`| increase log level & print more verbose logs |
 | `IMAGE_NAME`| `localstack/localstack` (default), `localstack/localstack:0.11.0` | Specific name and tag of LocalStack Docker image to use.|
-| `GATEWAY_LISTEN`| `0.0.0.0:4566` (default in Docker mode) `127.0.0.1:4566` (default in host mode) | Configures the bind addresses of LocalStack. It has the form `<ip address>:<port>(,<ip address>:<port>)*`. LocalStack Pro adds port `443`. |
+| `GATEWAY_LISTEN`| `0.0.0.0:4566` (default in Docker mode) `127.0.0.1:4566` (default in host mode) | bind addresses of LocalStack </br>  `<ip address>:<port>(,<ip address>:<port>)*` syntax </br> LocalStack Pro adds port `443` |
 | `LOCALSTACK_HOST`| `localhost.localstack.cloud:4566` (default) | This is interpolated into URLs and addresses that are returned by LocalStack. It has the form `<hostname>:<port>`. |
 | `USE_SSL` | `0` (default) | Whether to return URLs using HTTP (`0`) or HTTPS (`1`). Changed with 3.0.0. In earlier versions this was toggling SSL support on or off. |
 | `PERSISTENCE` | `0` (default) | Enable persistence. See [Persistence Mechanism]({{< ref "user-guide/state-management/persistence" >}}) and [Filesystem Layout]({{< ref "filesystem" >}}). |
@@ -42,7 +42,7 @@ Options that affect the core LocalStack system.
 | `EXTERNAL_SERVICE_PORTS_START` | `4510` (default) | Start of the [External Service Port Range]({{< ref "external-ports" >}}) (inclusive). |
 | `EXTERNAL_SERVICE_PORTS_END` | `4560` (default) | End of the [External Service Port Range]({{< ref "external-ports" >}}) (exclusive). |
 | `EAGER_SERVICE_LOADING` | `0` (default) \|`1` | Boolean that toggles lazy loading of services. If eager loading is enabled, services are started at LocalStack startup rather than their first use. Be aware that eager loading increases the LocalStack startup time. |
-| `SERVICES`| `s3,sqs` | comma-delimited string of services </br> [internal health endpoint returns the valid service names]({{< ref "internal-endpoints/#localstack-endpoints" >}}) `/_localstack/health` </br> if `SERVICES` is set -> LocalStack will ONLY load the listed services, & other services will be disabled |
+| `SERVICES`| `s3,sqs` | comma-delimited string of services </br> [internal health endpoint returns the valid service names]({{< ref "internal-endpoints/#localstack-endpoints" >}}) == `/_localstack/health` </br> if `SERVICES` is set -> LocalStack will ONLY load the listed services, & other services will be disabled |
 | `ALLOW_NONSTANDARD_REGIONS` | `0` (default) | Allows the use of non-standard AWS regions. By default, LocalStack only accepts [standard AWS regions](https://docs.aws.amazon.com/general/latest/gr/rande.html). |
 | `PARITY_AWS_ACCESS_KEY_ID` | `0` (default) | Enables the use production-like access key IDs. By default, LocalStack issues keys with `LSIA...` and `LKIA...` prefix, and will reject keys that start with `ASIA...` or `AKIA...`. |
 
