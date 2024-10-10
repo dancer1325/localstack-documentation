@@ -7,21 +7,23 @@ aliases:
   - /localstack/configuration/
 ---
 
-LocalStack exposes various configuration options to control its behaviour.
+* == configuration options / 
+  * exposed by LocalStack
+  * allows
+    * controlling its behaviour
+  * uses
+    * pass to LocalStack -- as -- environment variables
+    
+    ```
+    $ DEBUG=1 localstack start
+    ```
 
-These options can be passed to LocalStack as environment variables like so:
-
-{{< command >}}
-$ DEBUG=1 localstack start
-{{< / command >}}
-
-To facilitate interoperability, configuration variables can be prefixed with `LOCALSTACK_` in docker.
-For instance, setting `LOCALSTACK_PERSISTENCE=1` is equivalent to `PERSISTENCE=1`.
-
-You can also use [Profiles](#profiles).
-
-Configurations marked as **Deprecated** will be removed in the next major version.
-You can find previously removed configuration variables under [Legacy](#legacy).
+  * recommendations
+    * if you want to facilitate interoperability -> 
+      * prefix with `LOCALSTACK_` | docker -- _Example:_ setting `LOCALSTACK_PERSISTENCE=1` == `PERSISTENCE=1`
+      * use [Profiles](#profiles)
+  * those / marked as **Deprecated** -> will be removed | next major version
+    * [previously removed configuration variables](#legacy)
 
 ## Core
 
@@ -29,7 +31,7 @@ Options that affect the core LocalStack system.
 
 | Variable | Example Values | Description |
 | - | - | - |
-| `DEBUG` | `0` (default) \|`1`| Flag to increase log level and print more verbose logs (useful for troubleshooting issues)|
+| `DEBUG` | `0` (default) \|`1`| increase log level & print more verbose logs |
 | `IMAGE_NAME`| `localstack/localstack` (default), `localstack/localstack:0.11.0` | Specific name and tag of LocalStack Docker image to use.|
 | `GATEWAY_LISTEN`| `0.0.0.0:4566` (default in Docker mode) `127.0.0.1:4566` (default in host mode) | Configures the bind addresses of LocalStack. It has the form `<ip address>:<port>(,<ip address>:<port>)*`. LocalStack Pro adds port `443`. |
 | `LOCALSTACK_HOST`| `localhost.localstack.cloud:4566` (default) | This is interpolated into URLs and addresses that are returned by LocalStack. It has the form `<hostname>:<port>`. |
@@ -40,7 +42,7 @@ Options that affect the core LocalStack system.
 | `EXTERNAL_SERVICE_PORTS_START` | `4510` (default) | Start of the [External Service Port Range]({{< ref "external-ports" >}}) (inclusive). |
 | `EXTERNAL_SERVICE_PORTS_END` | `4560` (default) | End of the [External Service Port Range]({{< ref "external-ports" >}}) (exclusive). |
 | `EAGER_SERVICE_LOADING` | `0` (default) \|`1` | Boolean that toggles lazy loading of services. If eager loading is enabled, services are started at LocalStack startup rather than their first use. Be aware that eager loading increases the LocalStack startup time. |
-| `SERVICES`| `s3,sqs` | A comma-delimited string of services. Check the [internal health endpoint]({{< ref "internal-endpoints/#localstack-endpoints" >}}) `/_localstack/health` for valid service names. If `SERVICES` is set LocalStack will only load the listed services. All other services will be disabled and cannot be used. |
+| `SERVICES`| `s3,sqs` | comma-delimited string of services </br> [internal health endpoint returns the valid service names]({{< ref "internal-endpoints/#localstack-endpoints" >}}) `/_localstack/health` </br> if `SERVICES` is set -> LocalStack will ONLY load the listed services, & other services will be disabled |
 | `ALLOW_NONSTANDARD_REGIONS` | `0` (default) | Allows the use of non-standard AWS regions. By default, LocalStack only accepts [standard AWS regions](https://docs.aws.amazon.com/general/latest/gr/rande.html). |
 | `PARITY_AWS_ACCESS_KEY_ID` | `0` (default) | Enables the use production-like access key IDs. By default, LocalStack issues keys with `LSIA...` and `LKIA...` prefix, and will reject keys that start with `ASIA...` or `AKIA...`. |
 
@@ -420,8 +422,9 @@ To learn more about these configuration options, see [DNS Server]({{< ref "dns-s
 
 ## Legacy
 
-These configurations have already been removed and **won't have any effect** on newer versions of LocalStack.
-**Please remove them from your configuration.**
+* ALREADY removed ->
+  * **NOT effect** | newer versions of LocalStack
+  * **remove them from your configuration**
 
 <!-- Note on ordering: The list is ordered first by version (descending) and then by Variable name (ascending). -->
 
@@ -431,10 +434,10 @@ These configurations have already been removed and **won't have any effect** on 
 | `<SERVICE>_PORT_EXTERNAL` | 3.0.0 | `4567` | Port number to expose a specific service externally . `SQS_PORT_EXTERNAL`, e.g. , is used when returning queue URLs from the SQS service to the client. |
 | `ACTIVATE_NEW_POD_CLIENT` | 3.0.0 | `0`\|`1` (default) |  Whether to use the new Cloud Pods client leveraging LocalStack container's APIs. |
 | `BIGDATA_MONO_CONTAINER` | 3.0.0 |`0`\|`1` (default) | Whether to spin Big Data services inside the LocalStack main container. Glue jobs breaks when using `BIGDATA_MONO_CONTAINER=0`. |
-| `DEFAULT_REGION` | 3.0.0 | `us-east-1` (default) | AWS region to use when talking to the API (needs to be activated via `USE_SINGLE_REGION=1`). LocalStack now has full multi-region support. |
+| `DEFAULT_REGION` | 3.0.0 | `us-east-1` (default) | AWS region used / -- talking to the -- API </br> requirements: `USE_SINGLE_REGION=1`) </br> LocalStack NOW has full multi-region support |
 | `EDGE_BIND_HOST` | 3.0.0 | `127.0.0.1` (default), `0.0.0.0` (docker)| Address the edge service binds to. Use `GATEWAY_LISTEN` instead. |
 | `EDGE_FORWARD_URL` | 3.0.0 | `http://10.0.10.5678` | Optional target URL to forward all edge requests to (e.g., for distributed deployments) |
-| `EDGE_PORT` | 3.0.0 | `4566` (default)| Port number for the edge service, the main entry point for all API invocations. |
+| `EDGE_PORT` | 3.0.0 | `4566` (default)| Port number for the edge service </br> == main entry point for all API invocations. |
 | `EDGE_PORT_HTTP` | 3.0.0 | `4566` (default)| Port number for the edge service, the main entry point for all API invocations. |
 | `ES_CUSTOM_BACKEND` | 3.0.0 | `http://elasticsearch:9200` |  Use [`OPENSEARCH_CUSTOM_BACKEND`](#opensearch) instead. URL to a custom elasticsearch backend cluster. If this is set to a valid URL, then LocalStack will not create elasticsearch cluster instances, but instead forward all domains to the given backend (see [Custom Elasticsearch Backends]({{< ref "es#custom-elasticsearch-backends" >}})). |
 | `ES_ENDPOINT_STRATEGY` | 3.0.0 | `path`\|`domain`\|`port` (formerly `off`) |  Use [`OPENSEARCH_ENDPOINT_STRATEGY`](#opensearch) instead. Governs how domain endpoints are created to access a cluster (see [Elasticsearch Endpoints]({{< ref "es#endpoints" >}})) |
@@ -462,7 +465,7 @@ These configurations have already been removed and **won't have any effect** on 
 | `MOCK_UNIMPLEMENTED` | 3.0.0 | `1` \| `0` (default)  |  Whether to return mocked success responses (instead of 501 errors) for currently unimplemented API methods |
 | `PERSIST_ALL` | 3.0.0 | `true` (default) | Whether to persist all resources (including user code like Lambda functions), or only "light-weight" resources (e.g., SQS queues, or Cognito users). Can be set to `false` to reduce storage size of `DATA_DIR` folders or Cloud Pods. |
 | `SYNCHRONOUS_KINESIS_EVENTS` | 3.0.0 | `1` (default) \| `0` | Whether or not to handle Kinesis Lambda event sources as synchronous invocations. |
-| `USE_SINGLE_REGION` | 3.0.0 | `1` \| `0` (default) |  Whether to use the legacy single-region mode, defined via `DEFAULT_REGION`. |
+| `USE_SINGLE_REGION` | 3.0.0 | `1` \| `0` (default) |  enable use the legacy 1!-region mode / -- defined via -- `DEFAULT_REGION` |
 | `DATA_DIR`| 2.0.0 | blank (disabled/default), `/tmp/localstack/data` |  Local directory for saving persistent data. Use `PERSISTENCE` instead. |
 | `DISABLE_TERM_HANDLER` | 2.0.0 | `""` (default) \| `1` | Whether to disable signal passing to LocalStack when running in docker. Enabling this will prevent an orderly shutdown when running inside LS in docker. Setting this to anything else than an empty string will disable it.
 | `HOST_TMP_FOLDER` | 2.0.0 | `/some/path` |  Temporary folder on the host that gets mounted as `$TMPDIR/localstack` into the LocalStack container. Required only for Lambda volume mounts when using `LAMBDA_REMOTE_DOCKER=false.` |
