@@ -244,46 +244,46 @@ See [LocalStack Docker Extension]({{< ref "localstack-docker-extension" >}}) for
   * if you want to facilitate interoperability -> configuration variables can be prefixed with `LOCALSTACK_` | docker
     * _Example:_ set `LOCALSTACK_PERSISTENCE=1` == `PERSISTENCE=1`
 
-{{< tabpane lang="yml" >}}
-{{< tab header="Community" lang="yml" >}}
-version: "3.8"
-services:
-  localstack:
-    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
-    image: localstack/localstack  # latest, by default
-    # image: localstack/localstack:<version>        # if you want to specify the version
-    ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
-    environment:
-      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
-      - DEBUG=${DEBUG:-0}
-    volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-{{< /tab >}}
-{{< tab header="Pro" lang="yml" >}}
-version: "3.8"
-services:
-  localstack:
-    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
-    image: localstack/localstack-pro  # required for Pro
-    ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
-      - "127.0.0.1:443:443"              # LocalStack HTTPS Gateway (Pro)
-    environment:
-      # Activate LocalStack Pro: https://docs.localstack.cloud/getting-started/auth-token/
-      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?}  # required for Pro
-      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
-      - DEBUG=${DEBUG:-0}
-      - PERSISTENCE=${PERSISTENCE:-0}
-    volumes:
-      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-{{< /tab >}}
-{{< /tabpane >}}
+* _Example1:_ Community 
 
+    ```
+    version: "3.8"
+    services:
+      localstack:
+        container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+        image: localstack/localstack  # latest, by default
+        # image: localstack/localstack:<version>        # if you want to specify the version
+        ports:
+          - "127.0.0.1:4566:4566"            # LocalStack Gateway
+          - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+        environment:
+          # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+          - DEBUG=${DEBUG:-0}
+        volumes:
+          - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+          - "/var/run/docker.sock:/var/run/docker.sock"
+    ```
+* _Example:_ Pro
+    ```
+    version: "3.8"
+    services:
+      localstack:
+        container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+        image: localstack/localstack-pro  # required for Pro
+        ports:
+          - "127.0.0.1:4566:4566"            # LocalStack Gateway
+          - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+          - "127.0.0.1:443:443"              # LocalStack HTTPS Gateway (Pro)
+        environment:
+          # Activate LocalStack Pro: https://docs.localstack.cloud/getting-started/auth-token/
+          - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?}  # required for Pro
+          # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+          - DEBUG=${DEBUG:-0}
+          - PERSISTENCE=${PERSISTENCE:-0}
+        volumes:
+          - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+          - "/var/run/docker.sock:/var/run/docker.sock"
+    ```
 
 * `$ docker-compose up`
 * if using the Docker default bridge network (`network_mode: bridge`), container name resolution does NOT work |  inside your containers -> remove it
