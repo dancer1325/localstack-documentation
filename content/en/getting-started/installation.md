@@ -298,7 +298,7 @@ services:
 
 ### Docker
 
-* TODO:
+* TODO: 
 You can also directly start the LocalStack container using the Docker CLI instead of [Docker-Compose]({{< ref "#docker-compose" >}}).
 This method requires more manual steps and configuration, but it gives you more control over the container settings.
 
