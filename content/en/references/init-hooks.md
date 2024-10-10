@@ -9,40 +9,53 @@ aliases:
 
 ## Lifecycle stages and hooks
 
-LocalStack has four well-known lifecycle phases or stages:
-* `BOOT`: the container is running but the LocalStack runtime has not been started
-* `START`: the Python process is running and the LocalStack runtime is starting
-* `READY`: LocalStack is ready to serve requests
-* `SHUTDOWN`: LocalStack is shutting down
+* 4 well-known lifecycle phases or stages
+  * `BOOT`
+    * container is running BUT LocalStack runtime has NOT been started
+  * `START`
+    * Python process is running & LocalStack runtime is starting
+  * `READY`
+    * LocalStack is ready to serve requests
+  * `SHUTDOWN`
+    * LocalStack is shutting down
 
-You can hook into each of these lifecycle phases using custom shell or Python scripts.
-Each lifecycle phase has its own directory in `/etc/localstack/init`.
-You can mount individual files, stage directories, or the entire init directory from your host into the container.
+* allows
+  * hook into / lifecycle phases -- via -- custom
+    * shell
+    * Python scripts
+  * mounting individual files, stage directories, or the entire init directory | your host -> into the container
 
-```plaintext
-/etc
-└── localstack
-    └── init
-        ├── boot.d           <-- executed in the container before localstack starts
-        ├── ready.d          <-- executed when localstack becomes ready
-        ├── shutdown.d       <-- executed when localstack shuts down
-        └── start.d          <-- executed when localstack starts up
-```
+* own directory | `/etc/localstack/init` / lifecycle phase
 
-In these directories, you can put either executable shell scripts or Python programs, which will be executed from within a Python process.
-All except `boot.d` will be run in the same Python interpreter as LocalStack, which gives additional ways of configuring/extending LocalStack.
-You can also use subdirectories to organize your init scripts.
-
-Currently, known script extensions are `.sh` and `.py`.
-Additionally, with the installation of the `localstack-extension-terraform-init` [extension]({{<ref "user-guide/extensions/">}}), `.tf` files can also be supported.
-Shell scripts have to be executable, and have to have a [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) (usually `#!/bin/bash`).
-
-A script can be in one of four states: `UNKNOWN`, `RUNNING`, `SUCCESSFUL`, `ERROR`.
-Scripts are by default in the `UNKNOWN` state once they have been discovered.
-The remaining states should be self-explanatory.
+    ```plaintext
+    /etc
+    └── localstack
+        └── init
+            ├── boot.d           <-- executed in the container before localstack starts
+            ├── ready.d          <-- executed when localstack becomes ready
+            ├── shutdown.d       <-- executed when localstack shuts down
+            └── start.d          <-- executed when localstack starts up
+    ```
+  * subdirectories can be created
+  * uses
+    * place your desired executable shell scripts (`.sh`) or Python programs (`.py`) | these directories
+      * scripts or Python programs -- are executed from -- within a Python process
+      * ALL scripts EXCEPT those | `boot.d` -- will be run in the -- SAME Python interpreter as LocalStack
+        * -> additional ways of configuring/extending LocalStack
+      * if you install `localstack-extension-terraform-init` [extension]({{<ref "user-guide/extensions/">}}) -> `.tf` files can also be supported
+      * Shell scripts requirements
+        * be executable
+        * have a [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) ( --usually -- `#!/bin/bash`)
+      * script states
+        * `UNKNOWN`
+          * once script is discovered -> set in this state
+        * `RUNNING`
+        * `SUCCESSFUL`
+        * `ERROR`
 
 ### Execution order and script failures
 
+* TODO:
 Scripts are sorted and executed in alphanumerical order.
 If you use subdirectories, scripts in parent folders are executed first, and then the directories are traversed in alphabetical order, depth first.
 If an init script fails, the remaining scripts will still be executed in order.
