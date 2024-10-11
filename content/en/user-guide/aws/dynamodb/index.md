@@ -156,19 +156,20 @@ To enable this feature, you need to set the environment variable `DYNAMODB_IN_M
 
 ### Time To Live
 
-LocalStack supports [Time to Live (TTL)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html) in DynamoDB.
-To enable this feature, you need to set the environment variable `DYNAMODB_REMOVE_EXPIRED_ITEMS` to 1.
-This enables a worker running every 60 minutes that scans all the tables and deletes the expired items.
+* [Time to Live (TTL)](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html)
+* supported
+* if you set `DYNAMODB_REMOVE_EXPIRED_ITEMS=1` -> enable it
+* how does it work?
+  * worker
+    * running / 60 minutes
+      * scans ALL the tables
+      * deletes the expired items
+    * if you want to programmatically trigger the worker -> hit the endpoint `DELETE /_aws/dynamodb/expired`
 
-In addition, to programmatically trigger the worker at convenience, we provide the following endpoint:
-- `DELETE /_aws/dynamodb/expired`
-
-The response returns the number of deleted items:
-
-```console
-curl -X DELETE localhost:4566/_aws/dynamodb/expired
-{"ExpiredItems": 3}
-```
+    ```console
+    curl -X DELETE localhost:4566/_aws/dynamodb/expired
+    {"ExpiredItems": 3}
+    ```
 
 ## Resource Browser
 
