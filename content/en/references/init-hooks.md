@@ -38,7 +38,7 @@ aliases:
     ```
   * subdirectories can be created
   * uses
-    * place your desired executable shell scripts (`.sh`) or Python programs (`.py`) | these directories
+    * 👁️place your desired executable shell scripts (`.sh`) or Python programs (`.py`) | these directories 👁️
       * scripts or Python programs -- are executed from -- within a Python process
       * ALL scripts EXCEPT those | `boot.d` -- will be run in the -- SAME Python interpreter as LocalStack
         * -> additional ways of configuring/extending LocalStack
@@ -55,14 +55,21 @@ aliases:
 
 ### Execution order and script failures
 
-* TODO:
-Scripts are sorted and executed in alphanumerical order.
-If you use subdirectories, scripts in parent folders are executed first, and then the directories are traversed in alphabetical order, depth first.
-If an init script fails, the remaining scripts will still be executed in order.
-A script is considered in `ERROR` state if it is a shell script and returns with a non-zero exit code, or if a Python script raises an exception during its execution.
+* Scripts 
+  * sorted and executed | alphanumerical order
+  * if they are placed | subdirectories -> scripts
+    * | parent folders are executed first
+    * directories -- are traversed in --
+      * alphabetical order
+      * depth first
+  * if an init script fails -> remaining scripts will STILL be executed in order
+  * requirements to consider a script as `ERROR`
+    * shell script / returns non-zero exit code
+    * Python script / raises an exception -- during its -- execution
 
 ## Status endpoint
 
+* TODO:
 There is an additional endpoint at `localhost:4566/_localstack/init` which returns the state of the initialization procedure.
 Boot scripts (scripts placed in `boot.d`) are currently always in the `UNKNOWN` state, since they are executed outside the LocalStack process and we don't know whether they have been successfully executed or not.
 
@@ -124,21 +131,21 @@ which returns either `true` or `false`.
 
 ## Usage example
 
-A common use case for init hooks is pre-seeding LocalStack with custom state.
-If you have more complex state, [Cloud Pods]({{< ref "user-guide/state-management/cloud-pods" >}})  and  [how to auto-load them on startup]({{< ref "user-guide/state-management/cloud-pods#auto-loading-cloud-pods" >}})  may be a good option to look into!
+* pre-seeding LocalStack -- with -- custom simple state
+  * if you have complex state -> check
+    * [Cloud Pods]({{< ref "user-guide/state-management/cloud-pods" >}})
+    * [how to auto-load them on startup]({{< ref "user-guide/state-management/cloud-pods#auto-loading-cloud-pods" >}})
+  * _Example:_ create certain S3 bucket or DynamoDB table created | starting LocalStack
+    * create a script `init-aws.sh` / 
+      * `chmod +x init-aws.sh`
+        * make it executable
+      * mount it | `/etc/localstack/init/ready.d/`
 
-But for simple state, for example if you want to have a certain S3 bucket or DynamoDB table created when starting LocalStack, init hooks can be very useful.
-
-To execute aws cli commands when LocalStack becomes ready,
-simply create a script `init-aws.sh` and mount it into `/etc/localstack/init/ready.d/`.
-Make sure the script is executable: run `chmod +x init-aws.sh` on the file first.
-You can use anything available inside the container, including `awslocal`:
-
-```bash
-#!/bin/bash
-awslocal s3 mb s3://my-bucket
-awslocal sqs create-queue --queue-name my-queue
-```
+    ```bash
+    #!/bin/bash
+    awslocal s3 mb s3://my-bucket
+    awslocal sqs create-queue --queue-name my-queue
+    ```
 
 Start Localstack:
 

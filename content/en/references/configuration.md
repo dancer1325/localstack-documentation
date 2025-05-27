@@ -486,7 +486,9 @@ To learn more about these configuration options, see [DNS Server]({{< ref "dns-s
 
 ## Profiles
 
-LocalStack supports configuration profiles which are stored in the `~/.localstack` config directory.
+* == configuration profiles
+* stored | `~/.localstack`
+* TODO:
 A configuration profile is a set of environment variables stored in an `.env` file in the LocalStack config directory.
 
 Here is an example of what configuration profiles might look like:
